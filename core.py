@@ -13,7 +13,11 @@ wrap = "```py\n{}\n```" # Needed for eval
 with open("./config.json", "r") as f:
     config = json.load(f)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(*prefixes), description=description, owner_id=190544080164487168, game="with code!")
+bot = commands.Bot(
+    command_prefix=commands.when_mentioned_or(*prefixes), 
+    description=description, 
+    owner_id=190544080164487168, 
+    game=discord.Game(name="with code!", url="http://twitch.tv/monstercat", type=1))
 
 @bot.event
 async def on_ready():
