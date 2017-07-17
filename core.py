@@ -8,10 +8,12 @@ startup_exts = ["moderation", "dice"]
 
 prefixes = ["t!", "term!", "terminal "]
 
+wrap = "```py\n{}\n```" # Needed for eval
+
 with open("./config.json", "r") as f:
     config = json.load(f)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(*prefixes), description=description, owner_id=190544080164487168)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(*prefixes), description=description, owner_id=190544080164487168, game="with code!")
 
 @bot.event
 async def on_ready():
@@ -71,7 +73,20 @@ async def reload(ctx, ename : str):
 async def exit(ctx):
     await ctx.send("Bot shutting down...")
     exit()
-        
+
+@bot.command(description="Evaluates some code. VERY DANGEROUS.", aliases=["e", "ev"], name="eval")
+@commands.is_owner()
+async def _eval(ctx, *args):
+    """Evaluates some code. VERY DANGEROUS."""
+    try:
+        result = eval(code)
+        if asyncio.iscoroutine(result):
+            await result
+        else:
+            await ctx.send(wrap.format(result))
+    except Exception as e:
+        await ctx.send(wrap.format(type(e).__name__ + ': ' + str(e)))
+
     
 
 if __name__ == "__main__": 
