@@ -80,7 +80,7 @@ async def exit(ctx):
 
 @bot.command(description="Evaluates some code. VERY DANGEROUS.", aliases=["e", "ev"], name="eval")
 @commands.is_owner()
-async def _eval(ctx, *args):
+async def _eval(ctx, *, code : str):
     """Evaluates some code. VERY DANGEROUS."""
     try:
         result = eval(code)
@@ -88,7 +88,7 @@ async def _eval(ctx, *args):
             await result
         else:
             await ctx.send(wrap.format(result))
-    except Exception as e:
+    except Exception as e: # pylint: disable=bare-except
         await ctx.send(wrap.format(type(e).__name__ + ': ' + str(e)))
 
     
