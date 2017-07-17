@@ -27,7 +27,7 @@ def test_pylint():
                              "fixme,cell-var-from-loop,too-many-locals,"
                              "too-many-arguments,too-many-statements,"
                              "no-member,unused-argument,redefined-outer-name"
-                             " folder1 folder2").split(),
+                             " core.py extensions").split(),
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
 
