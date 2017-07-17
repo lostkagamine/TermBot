@@ -43,6 +43,7 @@ async def load(ctx, cog_name : str):
 @bot.command(description="Unloads an extension", aliases=["ule"])
 @commands.is_owner()
 async def unload(ctx, ename : str):
+    """Unloads an extension."""
     try:
         bot.unload_extension("extensions."+ename)
         print("Unloading extension {}".format(ename))
@@ -50,6 +51,20 @@ async def unload(ctx, ename : str):
         await ctx.send("```\n{}```".format(e))
         return
     await ctx.send("Unloaded extension {}".format(ename))
+
+@bot.command(description="Reloads an extension", aliases=["rle", "reloady"])
+@commands.is_owner()
+async def reload(ctx, ename : str):
+    try:
+        bot.unload_extension("extensions."+ename)
+        print("Unloading extension {}".format(ename))
+        bot.load_extension("extensions."+ename)
+        print("Reloading extension {}".format(ename))
+    except Exception as e: # pylint: disable=bare-except
+        await ctx.send("```\n{}```".format(e))
+        return
+    await ctx.send("Reloaded extension {}".format(ename))
+        
     
 
 if __name__ == "__main__": 
