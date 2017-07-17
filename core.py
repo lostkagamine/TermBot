@@ -97,7 +97,7 @@ if __name__ == "__main__":
     for ext in startup_exts:
         try:
             print("Loading extension {}".format(ext))
-            bot.load_extension(ext)
+            bot.load_extension("extensions."+ext)
         except Exception as e:  # pylint: disable=bare-except
             exc = "{}: {}".format(type(e).__name__, e)
             print("Failed to load {}:\n{}".format(ext, exc))
