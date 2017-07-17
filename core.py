@@ -72,9 +72,9 @@ async def reload(ctx, ename : str):
         return
     await ctx.send("Reloaded extension {}".format(ename))
 
-@bot.command(description="Stops the bot.", aliases=["quit", "disconnect"])
+@bot.command(description="Stops the bot.", aliases=["quit", "disconnect", "stop"], name="exit")
 @commands.is_owner()
-async def exit(ctx):
+async def _exit(ctx):
     await ctx.send("Bot shutting down...")
     exit()
 
