@@ -1,8 +1,13 @@
 {
-    "token": "Your Token Here",
+    "token": "Token here",
     "game": {
-        "name": "Sample game",
-        "url": "Sample URL",
-        "status": 0 // 1 for streaming, 0 for not streaming
-    }
+        "name": "Game name",
+        "url": "Twitch stream URL",
+        "status": 0 // Set to 1 for streaming
+    },
+    "prefixes": ["Your", "prefixes", "here"],
+    "extensions": {
+        "startup": ["moderation"]
+    },
+    "owners": [] // Owner IDs go here! Give as numbers, not strings.
 }

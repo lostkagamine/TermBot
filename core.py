@@ -4,11 +4,11 @@ import json, asyncio, aiohttp, time, discord
 
 description = """Terminal's Discord bot."""
 
-startup_exts = ["moderation", "dice"]
+startup_exts = config["extensions"]["startup"]
 
-prefixes = ["t!", "term!", "terminal "]
+prefixes = config["prefixes"]
 
-bot_owners = [190544080164487168, 161866631004422144, 86477779717066752]
+bot_owners = config["owners"]
 
 wrap = "```py\n{}\n```" # Needed for eval
 
