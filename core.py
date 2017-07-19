@@ -96,7 +96,21 @@ async def _eval(ctx, *, code : str):
     except Exception as e: # pylint: disable=bare-except
         await ctx.send(wrap.format(type(e).__name__ + ': ' + str(e)))
 
-    
+
+
+@bot.command()
+async def error():
+    3/0
+
+async def on_command_error(ctx, exc):
+    e = f"{type(exc).__name__}: {exc}"
+    emb = discord.Embed(
+        title=":warning: An error occurred",
+        color=discord.Colour.red(),
+        description="Please report this error to the bot's developers, so it will be fixed as fast as possible. Provide details of what you did for this to happen, along with the full Traceback below.",
+        url="http://github.com/Terminal/DiscordBot"
+    )
+    emb.add_field("Traceback", f"```\n{e}```")
 
 if __name__ == "__main__": 
     for ext in startup_exts:
