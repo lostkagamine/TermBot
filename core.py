@@ -5,7 +5,7 @@ import json, asyncio, aiohttp, time, discord
 with open("./config.json", "r") as f:
     config = json.load(f)
 
-description = """Terminal's Discord bot."""
+description = config["description"]
 
 startup_exts = config["extensions"]["startup"]
 
@@ -14,8 +14,6 @@ prefixes = config["prefixes"]
 bot_owners = config["owners"]
 
 wrap = "```py\n{}\n```" # Needed for eval
-
-
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(*prefixes), 
