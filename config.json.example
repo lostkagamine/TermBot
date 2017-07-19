@@ -1,3 +1,8 @@
 {
-    "token": "YOUR_BOT_TOKEN_HERE"
+    "token": "Your Token Here",
+    "game": {
+        "name": "Sample game",
+        "url": "Sample URL",
+        "status": 0 // 1 for streaming, 0 for not streaming
+    }
 }

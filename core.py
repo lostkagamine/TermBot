@@ -17,7 +17,7 @@ bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(*prefixes), 
     description=description, 
     owner_id=190544080164487168, 
-    game=discord.Game(name="with code!", url="http://twitch.tv/monstercat", type=1))
+    game=discord.Game(name=config["game"]["name"], url=config["game"]["url"], type=config["game"]["status"]))
 
 @bot.event
 async def on_ready():
