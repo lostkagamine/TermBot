@@ -110,7 +110,8 @@ async def on_command_error(ctx, exc):
         description="Please report this error to the bot's developers, so it will be fixed as fast as possible. Provide details of what you did for this to happen, along with the full Traceback below.",
         url="http://github.com/Terminal/DiscordBot"
     )
-    emb.add_field("Traceback", f"```\n{e}```")
+    emb.add_field(name="Traceback", value=f"```\n{e}```")
+    await ctx.send("", embed=emb)
 
 if __name__ == "__main__": 
     for ext in startup_exts:
