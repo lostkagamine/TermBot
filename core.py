@@ -139,7 +139,7 @@ async def _eval(ctx, *, code: str):
             eval_env["_"] = res
             await ctx.send('```py\n{0}\n```'.format(res))
         else:
-            await ctx.send("\NNo additional output.")
+            await ctx.send("No additional output.")
 
 
 
