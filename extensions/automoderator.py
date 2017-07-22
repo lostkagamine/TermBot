@@ -1,4 +1,4 @@
-import discord, re
+import discord, re, asyncio
 import rethinkdb as r
 from discord.ext import commands
 
@@ -8,12 +8,17 @@ regex = "(?:discord(?:(?:\.|.?dot.?)gg|app(?:\.|.?dot.?)com\/invite)\/(([\w]{1,}
 class AntiAdvertising():
             
     @commands.command(pass_context=True)
-    async def automodsetup(ctx, *args):
-        print("ran")
-        if args == None:
+    async def anti_ad_setup(self, ctx):
+        m = await ctx.send("**TermBot Anti-Invite Feature**\n\nWhat punishment do you want advertisers to incur? (kick/ban/delete) [10 seconds]")
+        def a(m):
+            return (m.content == "ban" or m.content == "kick" or m.content == "delete") and m.channel == ctx.channel and m.author == ctx.author
+        try:
+            msg = await self.bot.wait_for("message", check=a, timeout=10)
+        except asyncio.TimeoutError:
+            await m.edit(content="Operation cancelled")
             return
-        if args[0] == "invite":
-            await ctx.send("testing")
+
+
 
     def __init__(self, bot):
         self.bot = bot
@@ -24,12 +29,9 @@ class AntiAdvertising():
                 r = re.search(regex, msg.content)
                 if r != None:
                     # handle stuff
-                    try:
-                        await msg.delete()
-                        await msg.channel.send(":x: Do not advertise.")
-                        await msg.author.kick(reason="Advertising (TermBot automoderator)")
-                    except discord.Forbidden as e:
-                        print(f"A user advertised, but I couldn't kick them because of permissions.\n{e}")
+                    await msg.delete()
+
+                    
 
 
 def setup(bot):

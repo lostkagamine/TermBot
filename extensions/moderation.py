@@ -43,7 +43,7 @@ class Moderation():
         await m.delete()
         try:
             await ctx.guild.ban(member, reason=reason, delete_message_days=7)
-            await ctx.guild.unban(member, reason=reason, delete_message_days=7)
+            await ctx.guild.unban(member, reason=reason)
             await ctx.send("User {} was successfully softbanned.".format(str(member)))
         except (discord.HTTPException, discord.Forbidden) as e:
             await ctx.send("I couldn't softban the user. Have you checked I have the proper permissions and that my role is higher than the user you want to softban?")
