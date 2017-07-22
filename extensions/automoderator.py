@@ -1,4 +1,4 @@
-import discord, re, asyncio
+import discord, re, asyncio, json
 import rethinkdb as r
 from discord.ext import commands
 
@@ -45,8 +45,10 @@ class AntiAdvertising():
 
 
     def __init__(self, bot):
+        with open("./config.json", "r") as f:
+            config = json.load(f)
         self.bot = bot
-        self.conn = r.connect("localhost", 28015, db="termbot")
+        self.conn = r.connect(config["rethinkdb"]["host"], config["rethinkdb"]["port"], db=config["rethinkdb"]["db"])
         @bot.listen("on_message")
         async def on_message(msg):
             if msg.guild.me.permissions_in(msg.channel).manage_messages == True:
