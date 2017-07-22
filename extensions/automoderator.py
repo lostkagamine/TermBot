@@ -9,9 +9,9 @@ class AntiAdvertising():
             
     @commands.command(pass_context=True)
     async def anti_ad_setup(self, ctx):
-        if ctx.author.permissions_in(ctx.channel).manage_server == False:
+        if ctx.author.permissions_in(ctx.channel).manage_guild == False:
             return
-        if r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).run(self.conn).next() != None:
+        if not r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).isEmpty().run(self.conn):
             await ctx.send("This guild already has automoderation set up.")
             return
         m = await ctx.send("**TermBot Anti-Invite Feature**\n\nWhat punishment do you want advertisers to incur? (kick/ban/softban/delete/disable) [10 seconds]")
