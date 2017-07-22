@@ -1,8 +1,19 @@
 {
-    "token": "Your Token Here",
+    "token": "Token here",
     "game": {
-        "name": "Sample game",
-        "url": "Sample URL",
-        "status": 0 // 1 for streaming, 0 for not streaming
+        "name": "Game name",
+        "url": "Twitch stream URL",
+        "status": 0 // Set to 1 for streaming
+    },
+    "prefixes": ["Your", "prefixes", "here"],
+    "extensions": {
+        "startup": ["moderation", "automoderator"]
+    },
+    "owners": [], // Owner IDs go here! Give as numbers, not strings.
+    "description": "Your description here",
+    "rethinkdb": {
+        "host": "localhost",
+        "port": 27015,
+        "db": "termbot"
     }
 }
