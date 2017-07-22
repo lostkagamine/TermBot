@@ -17,6 +17,9 @@ class AntiAdvertising():
         except asyncio.TimeoutError:
             await m.edit(content="Operation cancelled")
             return
+        m.delete()
+        r.db("termbot").table("automoderator_invites").insert({"guild": ctx.guild.id, "type": msg.content}).run(self.conn)
+        await ctx.send("Set automoderation type to " + msg.content)
 
 
 
