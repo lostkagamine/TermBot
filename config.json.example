@@ -7,7 +7,13 @@
     },
     "prefixes": ["Your", "prefixes", "here"],
     "extensions": {
-        "startup": ["moderation"]
+        "startup": ["moderation", "automoderator"]
     },
-    "owners": [] // Owner IDs go here! Give as numbers, not strings.
+    "owners": [], // Owner IDs go here! Give as numbers, not strings.
+    "description": "Your description here",
+    "rethinkdb": {
+        "host": "localhost",
+        "port": 27015,
+        "db": "termbot"
+    }
 }
