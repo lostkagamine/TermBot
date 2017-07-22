@@ -2,6 +2,9 @@ from discord.ext import commands
 
 import json, asyncio, aiohttp, time, discord
 
+import inspect # Eval
+import re # Eval
+
 with open("./config.json", "r") as f:
     config = json.load(f)
 
@@ -13,7 +16,7 @@ prefixes = config["prefixes"]
 
 bot_owners = config["owners"]
 
-wrap = "```py\n{}\n```" # Needed for eval
+eval_env = {}
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(*prefixes), 
@@ -85,16 +88,58 @@ async def _exit(ctx):
 
 @bot.command(description="Evaluates some code. VERY DANGEROUS.", aliases=["e", "ev"], name="eval")
 @commands.check(is_owner)
-async def _eval(ctx, *, code : str):
-    """Evaluates some code. VERY DANGEROUS."""
-    try:
-        result = eval(code)
-        if asyncio.iscoroutine(result):
-            await result
+async def _eval(ctx, *, code: str):
+        env = {
+            "message": ctx.message,
+            "author": ctx.message.author,
+            "channel": ctx.message.channel,
+            "guild": ctx.message.guild,
+            "ctx": ctx,
+            "discord": discord,
+            "bot": ctx.bot,
+            "inspect": inspect
+        }
+
+        eval_env.update(env)
+
+        code = code.strip("`")
+        if code.startswith("py\n"):
+            code = "\n".join(code.split("\n")[1:])
+        if not re.search(
+                r"^(return|import|for|while|def|class|from|[a-zA-Z0-9]+\s*=)",
+                code, re.M) and len(code.split("\n")) == 1:
+            code = "_ = "+code
+
+        # Ignore this shitcode, it works
+        _code = "\n".join([
+            "async def func(bot, eval_env):",
+            "    locals().update(eval_env)",
+            "    old_locals = locals().copy()",
+            "    try:",
+            "{}",
+            "        new_locals = {{k:v for k,v in locals().items() "
+            "if k not in old_locals and k not in "
+            "['old_locals','_','func']}}",
+            "        if new_locals != {{}}:",
+            "            return new_locals",
+            "        else:",
+            "            if '_' in locals() and inspect.isawaitable(_):",
+            "                _ = await _",
+            "            return _",
+            "    finally:",
+            "        eval_env.update({{k:v for k,v in locals().items() "
+            "if k not in old_locals and k not in "
+            "['old_locals','_','new_locals','func']}})"
+        ]).format(textwrap.indent(code, '        '))
+
+        exec(_code, eval_env)
+        func = eval_env['func']
+        res = await func(bot, eval_env)
+        if res is not None:
+            eval_env["_"] = res
+            await ctx.send('```py\n{0}\n```'.format(res))
         else:
-            await ctx.send(wrap.format(result))
-    except Exception as e: # pylint: disable=bare-except
-        await ctx.send(wrap.format(type(e).__name__ + ': ' + str(e)))
+            await ctx.send("\NNo additional output.")
 
 
 
