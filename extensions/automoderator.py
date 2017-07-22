@@ -11,8 +11,12 @@ class AntiAdvertising():
     async def anti_ad_setup(self, ctx):
         if ctx.author.permissions_in(ctx.channel).manage_guild == False:
             return
-        if not r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).isEmpty().run(self.conn):
-            await ctx.send("This guild already has automoderation set up.")
+        try:
+            a = r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).run(self.conn).next()
+        except rethinkdb.net.DefaultCursorEmpty:
+            pass
+        else:
+            await ctx.send("Automoderation already set up")
             return
         m = await ctx.send("**TermBot Anti-Invite Feature**\n\nWhat punishment do you want advertisers to incur? (kick/ban/softban/delete/disable) [10 seconds]")
         def a(m):
