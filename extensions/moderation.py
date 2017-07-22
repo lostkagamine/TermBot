@@ -17,6 +17,9 @@ class Moderation():
         if ctx.me.guild_permissions.ban_members == False:
             await ctx.send("I don't have permission. Please give me Ban Members and try again.")
             return
+        if member.top_role.position >= ctx.author.top_role.position:
+            await ctx.send("I can't do this.")
+            return
         if member == ctx.guild.owner:
             await ctx.send("I can't do this.")
             return
@@ -58,6 +61,9 @@ class Moderation():
         if ctx.me.guild_permissions.kick_members == False:
             await ctx.send("I don't have permission. Please give me Kick Members and try again.")
             return
+        if member.top_role.position >= ctx.author.top_role.position:
+            await ctx.send("I can't do this.")
+            return
         if member == ctx.guild.owner:
             await ctx.send("I can't do this.")
             return
@@ -96,6 +102,9 @@ class Moderation():
             return
         if ctx.me.guild_permissions.ban_members == False:
             await ctx.send("I don't have permission. Please give me Ban Members and try again.")
+            return
+        if member.top_role.position >= ctx.author.top_role.position:
+            await ctx.send("I can't do this.")
             return
         if member == ctx.guild.owner:
             await ctx.send("I can't do this.")
