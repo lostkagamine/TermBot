@@ -102,3 +102,6 @@ ENV/
 
 # bot configuration
 config.json
+
+# rethonk
+rethinkdb_data/
