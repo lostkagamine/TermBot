@@ -13,7 +13,7 @@ class AntiAdvertising():
             return
         try:
             a = r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).run(self.conn).next()
-        except rethinkdb.net.DefaultCursorEmpty:
+        except r.net.DefaultCursorEmpty:
             pass
         else:
             await ctx.send("Automoderation already set up")
