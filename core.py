@@ -2,7 +2,8 @@ from discord.ext import commands
 
 import json, asyncio, aiohttp, time, discord
 
-import inspect # Needed for eval! Don't remove!
+import inspect # Eval
+import re # Eval
 
 with open("./config.json", "r") as f:
     config = json.load(f)
@@ -15,6 +16,7 @@ prefixes = config["prefixes"]
 
 bot_owners = config["owners"]
 
+eval_env = {}
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(*prefixes), 
@@ -86,7 +88,7 @@ async def _exit(ctx):
 
 @bot.command(description="Evaluates some code. VERY DANGEROUS.", aliases=["e", "ev"], name="eval")
 @commands.check(is_owner)
-async def _eval(self, ctx, *, code: str):
+async def _eval(ctx, *, code: str):
         env = {
             "message": ctx.message,
             "author": ctx.message.author,
@@ -94,12 +96,11 @@ async def _eval(self, ctx, *, code: str):
             "guild": ctx.message.guild,
             "ctx": ctx,
             "discord": discord,
-            "self": self,
-            "bot": self.bot,
+            "bot": ctx.bot,
             "inspect": inspect
         }
 
-        self.env.update(env)
+        eval_env.update(env)
 
         code = code.strip("`")
         if code.startswith("py\n"):
@@ -111,8 +112,8 @@ async def _eval(self, ctx, *, code: str):
 
         # Ignore this shitcode, it works
         _code = "\n".join([
-            "async def func(self, env):",
-            "    locals().update(env)",
+            "async def func(bot, eval_env):",
+            "    locals().update(eval_env)",
             "    old_locals = locals().copy()",
             "    try:",
             "{}",
@@ -126,19 +127,19 @@ async def _eval(self, ctx, *, code: str):
             "                _ = await _",
             "            return _",
             "    finally:",
-            "        self.env.update({{k:v for k,v in locals().items() "
+            "        eval_env.update({{k:v for k,v in locals().items() "
             "if k not in old_locals and k not in "
             "['old_locals','_','new_locals','func']}})"
         ]).format(textwrap.indent(code, '        '))
 
-        exec(_code, self.env)
-        func = self.env['func']
-        res = await func(self, self.env)
+        exec(_code, eval_env)
+        func = eval_env['func']
+        res = await func(bot, eval_env)
         if res is not None:
-            self.env["_"] = res
+            eval_env["_"] = res
             await ctx.send('```py\n{0}\n```'.format(res))
         else:
-            await ctx.send("\N{THUMBS UP SIGN}")
+            await ctx.send("\NNo additional output.")
 
 
 
