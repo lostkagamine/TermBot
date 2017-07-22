@@ -7,7 +7,7 @@ regex = "(?:discord(?:(?:\.|.?dot.?)gg|app(?:\.|.?dot.?)com\/invite)\/(([\w]{1,}
 
 class AntiAdvertising():
             
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=["aas"])
     async def anti_ad_setup(self, ctx):
         if ctx.author.permissions_in(ctx.channel).manage_guild == False:
             await ctx.send("You must have Manage Server to be able to use this.")
@@ -31,7 +31,7 @@ class AntiAdvertising():
         r.table("automoderator_invites").insert({"guild": str(ctx.guild.id), "type": msg.content}).run(self.conn)
         await ctx.send("Set automoderation type to " + msg.content)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=["caa"])
     async def clear_anti_ad(self, ctx):
         if ctx.author.permissions_in(ctx.channel).manage_guild == False:
             await ctx.send("You must have Manage Server to be able to use this.")
