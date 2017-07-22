@@ -8,12 +8,13 @@ regex = "(?:discord(?:(?:\.|.?dot.?)gg|app(?:\.|.?dot.?)com\/invite)\/(([\w]{1,}
 class AntiAdvertising():
             
     @commands.command()
-    async def automod_setup(ctx, *args):
-        if args[0] == None:
+    async def automodsetup(ctx, *args):
+        print("ran")
+        if args == None:
             return
         if args[0] == "invite":
             if args[1] == None:
-                await ctx.send("Syntax: `automod_setup invite <ban/kick/delete>`")
+                await ctx.send("Syntax: `automodsetup invite <ban/kick/delete>`")
                 try:
                     t = r.db("termbot").table("automoderator_invites")
                 except rethinkdb.errors.ReqlOpFailedError:
