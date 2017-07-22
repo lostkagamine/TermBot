@@ -10,6 +10,7 @@ class AntiAdvertising():
     @commands.command(pass_context=True)
     async def anti_ad_setup(self, ctx):
         if ctx.author.permissions_in(ctx.channel).manage_guild == False:
+            await ctx.send("You must have Manage Server to be able to use this.")
             return
         try:
             a = r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).run(self.conn).next()
@@ -30,6 +31,17 @@ class AntiAdvertising():
         r.table("automoderator_invites").insert({"guild": str(ctx.guild.id), "type": msg.content}).run(self.conn)
         await ctx.send("Set automoderation type to " + msg.content)
 
+    @commands.command(pass_context=True)
+    async def clear_anti_ad(self, ctx):
+        if ctx.author.permissions_in(ctx.channel).manage_guild == False:
+            await ctx.send("You must have Manage Server to be able to use this.")
+            return
+        a = r.table("automoderator_invites").filter(r.row["guild"] == str(ctx.guild.id)).delete().run(self.conn)
+        if a["deleted"] == 0:
+            await ctx.send("This server didn't have any anti-ad feature settings.")
+        else:
+            await ctx.send("Cleared anti-ad feature settings.")
+        
 
 
     def __init__(self, bot):
