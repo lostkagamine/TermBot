@@ -4,6 +4,7 @@ import json, asyncio, aiohttp, time, discord
 
 import inspect # Eval
 import re # Eval
+import textwrap # Also Eval
 
 with open("./config.json", "r") as f:
     config = json.load(f)
